@@ -1,266 +1,275 @@
 # 🚦 Optimización de la ubicación de radares para la prevención de accidentes de tráfico en Madrid
 
-## 📌 Descripción del proyecto
-
-Este proyecto aborda el problema de la **localización óptima de radares de velocidad en Madrid** con el objetivo de identificar y priorizar las zonas con mayor concentración y gravedad de accidentes de tráfico.
-
-Para ello, se combinan técnicas de **análisis de datos, análisis espacial, modelado de redes y optimización**. A partir de los datos históricos de accidentes se identifican puntos negros, se evalúa su peligrosidad y posteriormente se utiliza la red viaria de Madrid para determinar qué tramos podrían ser candidatos adecuados para la instalación de nuevos radares.
-
-El objetivo final es seleccionar un conjunto limitado de ubicaciones que permita **maximizar la cobertura de las zonas de mayor riesgo**, evitando al mismo tiempo colocar radares excesivamente próximos entre sí o a los ya existentes.
+<p align="center">
+  <b>Análisis espacial · Detección de puntos negros · Grafos · Optimización</b>
+</p>
 
 ---
 
-## 🎯 Objetivos
+## 📌 Sobre el proyecto
 
-Los principales objetivos del proyecto son:
+Este proyecto analiza los **accidentes de tráfico registrados en Madrid** con el objetivo de identificar las zonas de mayor riesgo y proponer **25 ubicaciones óptimas para la instalación de nuevos radares**.
+
+Para ello, se combinan técnicas de **análisis y procesamiento de datos, análisis espacial, modelado de redes y optimización**.
+
+El proyecto parte de los accidentes históricos registrados entre **2019 y 2025**, identifica espacialmente los puntos negros y calcula un índice de peligrosidad. Posteriormente, esta información se integra en la red viaria de Madrid para evaluar diferentes tramos de carretera y seleccionar las ubicaciones más adecuadas para nuevos radares.
+
+> **Objetivo:** maximizar la cobertura de las zonas de mayor peligrosidad evitando una concentración excesiva de radares.
+
+---
+
+# 🎯 Objetivos
 
 * Analizar los accidentes de tráfico registrados en Madrid.
-* Estudiar su distribución espacial.
-* Detectar y clasificar **puntos negros** según su nivel de peligrosidad.
-* Construir una representación de la red viaria de Madrid mediante grafos.
-* Asociar la información de peligrosidad de los accidentes a la red de carreteras.
-* Incorporar los radares existentes como restricciones espaciales.
-* Evaluar los posibles tramos candidatos mediante diferentes factores de riesgo.
-* Seleccionar **25 ubicaciones óptimas para nuevos radares** mediante un algoritmo greedy.
-* Representar los resultados mediante mapas interactivos.
+* Detectar concentraciones espaciales de accidentes.
+* Identificar y clasificar **puntos negros** según su peligrosidad.
+* Construir un modelo de la red viaria de Madrid mediante grafos.
+* Integrar la información de accidentes con la red de carreteras.
+* Incorporar información sobre tráfico y radares existentes.
+* Evaluar los tramos candidatos mediante diferentes factores.
+* Seleccionar **25 ubicaciones para nuevos radares** mediante un algoritmo greedy.
+* Crear mapas interactivos para visualizar los resultados.
 
 ---
 
-## 📊 Datos utilizados
+# 📊 Datos
 
-El proyecto utiliza diferentes fuentes de datos relacionadas con la movilidad y la seguridad vial de Madrid.
+El proyecto utiliza diferentes fuentes de información relacionadas con la seguridad vial y la movilidad en Madrid.
 
-### Accidentes de tráfico
+### 🚗 Accidentes de tráfico
 
-El conjunto de datos histórico principal utilizado en el proyecto contiene información de accidentes registrados entre:
+El dataset histórico principal utilizado contiene accidentes registrados entre:
 
 **2019 – 2025**
 
-El fichero procesado contiene **317.844 registros** y recoge información relacionada con:
+El conjunto procesado contiene **317.844 registros**.
 
-* Fecha y hora del accidente.
-* Localización.
-* Distrito.
-* Tipo de accidente.
-* Condiciones meteorológicas.
-* Tipo de vehículo.
-* Tipo de persona implicada.
-* Rango de edad.
-* Sexo.
-* Gravedad de las lesiones.
-* Alcohol.
-* Drogas.
-* Coordenadas geográficas.
+Entre las variables disponibles se encuentran:
 
-Además, se dispone de un conjunto de datos separado correspondiente a accidentes de **2026**, utilizado como fuente adicional durante el desarrollo.
+* Fecha y hora
+* Localización
+* Distrito
+* Tipo de accidente
+* Tipo de vehículo
+* Personas implicadas
+* Gravedad
+* Alcohol
+* Drogas
+* Coordenadas geográficas
 
-### Otros datos
+También se utiliza un dataset independiente de accidentes correspondiente a **2026**.
 
-También se utilizan datos relacionados con:
+### 🛣️ Información adicional
 
-* 📡 Radares fijos y móviles.
-* 🚗 Intensidad de tráfico.
-* 🚦 Cruces semaforizados.
-* 🛣️ Red de carreteras de Madrid.
+Se incorporan además datos sobre:
 
-Las principales fuentes de datos son el **Portal de Datos Abiertos del Ayuntamiento de Madrid**, OpenStreetMap y Geofabrik.
+* Intensidad de tráfico.
+* Radares existentes.
+* Cruces semaforizados.
+* Red viaria de Madrid.
 
-Los datasets originales de gran tamaño no se incluyen íntegramente en el repositorio. En `data/README.md` se documentan sus fuentes y cómo obtenerlos.
+Las fuentes principales son el **Portal de Datos Abiertos del Ayuntamiento de Madrid**, OpenStreetMap y Geofabrik.
 
 ---
 
-# 🗺️ Metodología
+# 🔬 Metodología
 
-El proyecto se estructura en varias etapas:
+## 1️⃣ Detección y clasificación de puntos negros
 
-```text
-Datos de accidentes
-        │
-        ▼
-Limpieza y procesamiento
-        │
-        ▼
-Discretización espacial
-        │
-        ▼
-Detección de puntos negros
-        │
-        ▼
-Clasificación de peligrosidad
-        │
-        ▼
-Construcción de la red viaria
-        │
-        ▼
-Modelado mediante grafos
-        │
-        ▼
-Asignación de riesgo a la red
-        │
-        ▼
-Evaluación de tramos candidatos
-        │
-        ▼
-Optimización mediante algoritmo Greedy
-        │
-        ▼
-25 ubicaciones seleccionadas
+El análisis comienza con el procesamiento de los datos de accidentes de tráfico de Madrid. Tras la limpieza y eliminación de duplicados, los accidentes se agregan espacialmente mediante una **rejilla regular de aproximadamente 90 × 90 metros**. Esta discretización permite identificar zonas donde existe una concentración elevada de accidentes.
+
+Se optó por este enfoque frente a métodos de clustering como DBSCAN debido al **efecto de chaining** observado en zonas con una elevada densidad de accidentes, donde diferentes agrupaciones podían terminar conectándose entre sí.
+
+A partir de esta agregación espacial se identifican **7.763 puntos negros**, que posteriormente se clasifican en cuatro niveles de peligrosidad: **CRÍTICO, ALTO, MEDIO y BAJO**. La clasificación tiene en cuenta tanto el número de accidentes como su gravedad.
+
+Para caracterizar cada punto negro se calcula además un **índice de peligrosidad** que combina diferentes variables relacionadas con los accidentes. El índice asigna un mayor peso a la frecuencia de accidentes y a su gravedad, incorporando también los accidentes relacionados con el consumo de alcohol.
+
+## 2️⃣ Integración con la red viaria
+
+Una vez identificadas las zonas de mayor peligrosidad, se incorpora la **red de carreteras de Madrid** para trasladar el análisis espacial de los accidentes al contexto de las vías donde estos se producen.
+
+La red se representa mediante un grafo utilizando **OSMnx y NetworkX**, donde los nodos representan puntos de la red viaria y las aristas representan los diferentes tramos de carretera.
+
+Los puntos negros se relacionan espacialmente con los nodos de esta red. Cuando un nodo se encuentra a una distancia inferior a **50 metros** de un punto negro, se le asigna la información de peligrosidad correspondiente. En caso de existir varios puntos cercanos, se considera el de mayor peligrosidad.
+
+Este proceso permite pasar de un análisis basado únicamente en coordenadas geográficas a una representación de la peligrosidad directamente asociada a la **red viaria de Madrid**.
+
+## 3️⃣ Evaluación de candidatos para nuevos radares
+
+A partir de la red viaria enriquecida con la información de peligrosidad se identifican diferentes tramos como posibles ubicaciones para nuevos radares.
+
+Cada candidato recibe una puntuación que combina diferentes características relevantes para la seguridad vial, entre ellas el **nivel de peligrosidad, el tipo de vía, la velocidad, la intensidad de tráfico, la conectividad de la red y la categoría del nodo**.
+
+De esta forma, la selección no depende únicamente del número de accidentes de una zona, sino que considera conjuntamente diferentes factores relacionados con el riesgo y las características de la vía.
+
+## 4️⃣ Optimización mediante algoritmo Greedy
+
+Finalmente, se aplica un **algoritmo greedy de cobertura máxima ponderada** para seleccionar las ubicaciones de los nuevos radares.
+
+En cada iteración se selecciona el candidato con mayor puntuación entre los disponibles. Una vez seleccionado, se aplica una restricción espacial para evitar que las nuevas ubicaciones queden excesivamente próximas entre sí o a los radares existentes.
+
+En el proyecto se utiliza un **radio de exclusión de 500 metros** y el proceso continúa hasta obtener las **25 ubicaciones finales**.
+
+El algoritmo greedy permite obtener una solución de forma eficiente para un problema de optimización espacial de gran tamaño. No obstante, al tratarse de un método heurístico, la solución obtenida no garantiza necesariamente el óptimo global.
+
+## 5️⃣ Visualización de los resultados
+
+Los resultados de las diferentes etapas se representan mediante **mapas interactivos desarrollados con Folium y Leaflet**. Estos permiten explorar la distribución de los puntos negros, consultar sus principales características y visualizar posteriormente las ubicaciones seleccionadas por el modelo de optimización.
+
+De esta manera, el proyecto combina el análisis cuantitativo de los accidentes con una representación espacial que facilita la interpretación de los resultados.
+
 ```
 
 ---
 
-## 📍 1. Discretización espacial
+## 1️⃣ Detección de puntos negros
 
-Para analizar la concentración espacial de los accidentes se utiliza una **rejilla regular de aproximadamente 90 × 90 metros**.
+Para estudiar la distribución espacial de los accidentes se utiliza una **rejilla de aproximadamente 90 × 90 metros**.
 
-Los accidentes se agrupan dentro de estas celdas para detectar zonas con una elevada concentración de siniestros.
+Los accidentes se agregan espacialmente para identificar zonas con una elevada concentración de siniestros.
 
-Este enfoque se utilizó frente a métodos de clustering como DBSCAN debido al **efecto de chaining**, que podía generar agrupaciones excesivamente conectadas en zonas con una elevada densidad de accidentes.
+Este enfoque se utiliza frente a DBSCAN debido al **efecto de chaining** observado en zonas con una elevada densidad de accidentes.
 
-A partir del procesamiento espacial se identificaron:
+El análisis espacial permite identificar:
 
-* **7.763 puntos negros**
-* **140.872 accidentes únicos**
+### **7.763 puntos negros**
 
-Los puntos negros se clasificaron en cuatro categorías:
+clasificados en cuatro categorías:
 
-| Categoría  | Nº de puntos |
-| ---------- | -----------: |
-| 🔴 CRÍTICO |          439 |
-| 🟠 ALTO    |          798 |
-| 🟡 MEDIO   |        2.813 |
-| 🟢 BAJO    |        3.713 |
+| Categoría      | Nº de puntos |
+| -------------- | -----------: |
+| 🔴 **CRÍTICO** |          439 |
+| 🟠 **ALTO**    |          798 |
+| 🟡 **MEDIO**   |        2.813 |
+| 🟢 **BAJO**    |        3.713 |
 
-### Criterios de clasificación
-
-* 🔴 **Crítico:** ≥ 50 accidentes o ≥ 1 accidente mortal.
-* 🟠 **Alto:** 25–49 accidentes.
-* 🟡 **Medio:** 10–24 accidentes.
-* 🟢 **Bajo:** 5–9 accidentes.
+La clasificación considera principalmente la concentración y gravedad de los accidentes.
 
 ---
 
-## ⚠️ 2. Índice de peligrosidad
+## 2️⃣ Índice de peligrosidad
 
-Para cada punto negro se calcula un índice compuesto de peligrosidad basado en diferentes características de los accidentes.
+Cada punto negro recibe un **índice de peligrosidad** que combina diferentes características de los accidentes.
 
-El índice utiliza los siguientes pesos:
+Los pesos utilizados son:
 
 ```text
-Índice de peligrosidad =
-    0,4 × accidentes
-  + 0,3 × accidentes graves
-  + 0,2 × accidentes mortales
-  + 0,1 × accidentes relacionados con alcohol
+40 %  Accidentes
+30 %  Accidentes graves
+20 %  Accidentes mortales
+10 %  Accidentes relacionados con alcohol
 ```
 
-De esta forma, el modelo no considera únicamente el número de accidentes, sino también su **gravedad y determinadas circunstancias asociadas**.
+De esta manera, el modelo no considera únicamente cuántos accidentes se producen, sino también **su gravedad y determinadas circunstancias asociadas**.
 
 ---
 
-## 🛣️ 3. Modelado de la red viaria
+# 🛣️ 3️⃣ Modelado de la red viaria
 
-La red de carreteras de Madrid se representa mediante un **grafo** utilizando NetworkX y OSMnx.
+La red de carreteras de Madrid se representa mediante un **grafo** utilizando `OSMnx` y `NetworkX`.
 
-En este grafo:
+* Los **nodos** representan puntos de la red viaria.
+* Las **aristas** representan los tramos de carretera.
 
-* Los **nodos** representan intersecciones o puntos de la red.
-* Las **aristas** representan los tramos de carretera que conectan dichos nodos.
+Los puntos negros se relacionan espacialmente con los nodos de la red.
 
-Posteriormente, la información de los puntos negros se relaciona espacialmente con la red viaria.
+Los nodos situados a menos de **50 metros** de un punto negro reciben la información correspondiente a dicho punto.
 
-Los nodos situados a una distancia inferior a **50 metros** de un punto negro reciben su categoría de peligrosidad. Cuando existen varios puntos negros cercanos, se asigna la categoría correspondiente al punto de mayor peligrosidad.
+De esta forma, la información de peligrosidad obtenida a partir de los accidentes puede incorporarse directamente a la red viaria.
 
 ---
 
-## 📡 4. Optimización de la ubicación de radares
+# 📡 4️⃣ Optimización de radares
 
-Una vez identificadas las zonas de mayor riesgo, se generan candidatos sobre la red viaria.
+Una vez construida la red viaria y asignada la información de riesgo, se evalúan diferentes tramos como posibles ubicaciones para nuevos radares.
 
-Cada candidato recibe una puntuación teniendo en cuenta diferentes factores:
+Cada candidato recibe una puntuación basada en diferentes factores:
 
-* Nivel de peligrosidad.
+* Peligrosidad del punto negro.
 * Tipo de vía.
 * Velocidad.
 * Intensidad de tráfico.
 * Conectividad.
 * Categoría del nodo.
 
-Posteriormente se aplica un **algoritmo greedy** para seleccionar progresivamente las ubicaciones con mayor puntuación.
+A continuación se aplica un **algoritmo greedy de cobertura máxima ponderada**.
 
-Para evitar que las ubicaciones seleccionadas queden excesivamente concentradas, se aplica una restricción espacial de **500 metros** respecto a otras ubicaciones seleccionadas y a los radares existentes.
+En cada iteración se selecciona el candidato con mayor puntuación y se aplica una restricción espacial para evitar que las ubicaciones seleccionadas queden demasiado próximas.
 
-El resultado final son:
+Se utiliza un radio de exclusión de:
 
-### 📍 25 ubicaciones candidatas para nuevos radares
+### **500 metros**
 
-El algoritmo greedy proporciona una solución eficiente para el problema, aunque no garantiza necesariamente el óptimo global.
+El proceso continúa hasta seleccionar:
+
+# 📍 25 ubicaciones
+
+El algoritmo greedy proporciona una solución eficiente para un problema de optimización espacial de gran tamaño, aunque no garantiza necesariamente el óptimo global.
 
 ---
 
-# 🗺️ Mapas interactivos
+# 🗺️ Resultados interactivos
 
-Uno de los principales resultados del proyecto son los mapas interactivos desarrollados con **Folium y Leaflet**.
+Una de las principales salidas del proyecto son los **mapas interactivos**, desarrollados con Folium y Leaflet.
 
-## 🔴 Puntos negros de Madrid
+### 🔴 Mapa de puntos negros
 
-Este mapa permite explorar espacialmente los puntos negros detectados.
+Permite explorar la distribución espacial de los puntos negros de Madrid.
 
-Cada punto contiene información sobre:
+Cada punto proporciona información sobre:
 
 * Categoría.
 * Número de accidentes.
 * Accidentes graves.
 * Accidentes mortales.
 * Accidentes relacionados con alcohol.
-* Número de sensores IMD en un radio de 500 m.
+* Sensores IMD cercanos.
 * Índice de peligrosidad.
 * Coordenadas.
 
-El tamaño de los círculos es proporcional al índice de peligrosidad.
-
-👉 **[Abrir mapa interactivo de puntos negros](maps/black_spots.html)**
-
-El mapa utiliza las categorías:
-
-```text
-🔴 CRÍTICO
-🟠 ALTO
-🟡 MEDIO
-🟢 BAJO
-```
+👉 **[🗺️ Abrir mapa interactivo de puntos negros](maps/index.html)**
 
 ---
 
-## 📡 Ubicaciones optimizadas de radares
+# 📓 Notebooks
 
-Otro de los resultados principales es el mapa con las ubicaciones seleccionadas por el algoritmo de optimización.
+El análisis completo está dividido en tres notebooks:
 
-👉 **[Abrir mapa de ubicaciones de radares](maps/radar_locations.html)**
+### 01 — Análisis de puntos negros
 
-Este mapa permite comparar las ubicaciones propuestas con la distribución de los radares existentes y con las zonas de mayor riesgo.
+Procesamiento de los accidentes, análisis espacial, creación de la rejilla, cálculo del índice de peligrosidad y clasificación de los puntos negros.
 
----
+👉 [`01_analisis_puntos_negros.ipynb`](notebooks/01_analisis_puntos_negros.ipynb)
 
-# 📈 Resultados principales
+### 02 — Modelado de la red viaria
 
-El proyecto permite obtener una visión espacial de la distribución de los accidentes de tráfico y utilizarla posteriormente para apoyar la toma de decisiones sobre la ubicación de radares.
+Construcción y análisis del grafo de la red viaria de Madrid y asignación de los puntos negros a la red.
 
-Entre los principales resultados se encuentran:
+👉 [`02_modelado_red_viaria.ipynb`](notebooks/02_modelado_red_viaria.ipynb)
 
-* **317.844 registros** en el dataset histórico procesado.
-* **140.872 accidentes únicos** utilizados en el análisis espacial.
-* **7.763 puntos negros** identificados.
-* **439 puntos negros críticos**.
-* Clasificación de los puntos negros en cuatro niveles de peligrosidad.
-* Construcción de la red viaria de Madrid como un grafo.
-* Integración de información sobre tráfico y radares existentes.
-* Selección de **25 ubicaciones candidatas para nuevos radares**.
-* Desarrollo de mapas interactivos para explorar los resultados.
+### 03 — Optimización de radares
+
+Evaluación de candidatos y aplicación del algoritmo greedy para seleccionar las 25 ubicaciones propuestas.
+
+👉 [`03_optimizacion_radares.ipynb`](notebooks/03_optimizacion_radares.ipynb)
 
 ---
 
-# 🧰 Tecnologías utilizadas
+# 📈 Principales resultados
+
+| Resultado                                     |         Valor |
+| --------------------------------------------- | ------------: |
+| Accidentes históricos procesados              |   **317.844** |
+| Periodo principal                             | **2019–2025** |
+| Accidentes utilizados en el análisis espacial |   **140.872** |
+| Puntos negros detectados                      |     **7.763** |
+| Puntos críticos                               |       **439** |
+| Ubicaciones de radares propuestas             |        **25** |
+| Radio de exclusión                            |     **500 m** |
+
+---
+
+# 🧰 Tecnologías
 
 ### Lenguaje
 
@@ -278,22 +287,17 @@ Entre los principales resultados se encuentran:
 * Folium
 * QGIS
 
-### Grafos y redes
+### Redes y grafos
 
 * NetworkX
 * OSMnx
 
-### Algoritmos espaciales
+### Algoritmos
 
 * BallTree
 * Distancia Haversine
 * Índices espaciales
-
-### Visualización
-
-* Matplotlib
-* Folium
-* Leaflet
+* Algoritmo Greedy
 
 ### Herramientas
 
@@ -310,62 +314,54 @@ Entre los principales resultados se encuentran:
 madrid-traffic-radar-optimization/
 │
 ├── README.md
-├── requirements.txt
-├── .gitignore
 │
 ├── notebooks/
-│   ├── 01_data_preparation.ipynb
-│   ├── 02_black_spots_analysis.ipynb
-│   └── 03_radar_optimization.ipynb
+│   ├── 01_analisis_puntos_negros.ipynb
+│   ├── 02_modelado_red_viaria.ipynb
+│   └── 03_optimizacion_radares.ipynb
 │
-├── src/
-│   ├── data_processing.py
-│   ├── spatial_analysis.py
-│   ├── graph.py
-│   └── radar_optimization.py
+├── maps/
+│   └── index.html
 │
 ├── data/
 │   ├── README.md
 │   └── processed/
-│       └── puntos_negros_nodos.csv
-│
-├── maps/
-│   ├── black_spots.html
-│   └── radar_locations.html
-│
-├── results/
-│   ├── figures/
-│   └── radar_locations.csv
 │
 └── docs/
-    └── project_report.pdf
+    └── memoria.pdf
 ```
+
+---
+
+# 📄 Memoria del proyecto
+
+La memoria contiene la explicación completa de la metodología, el procesamiento de los datos, el modelado de la red, el algoritmo de optimización y los resultados obtenidos.
+
+👉 **[📄 Consultar memoria completa](docs/memoria.pdf)**
 
 ---
 
 # 🔎 Limitaciones y posibles mejoras
 
-El proyecto puede ampliarse en diferentes direcciones:
+Algunas posibles líneas de trabajo futuro son:
 
-* Incorporar medidas de tráfico más precisas.
-* Realizar un análisis de sensibilidad de los pesos utilizados en el índice de peligrosidad.
-* Analizar diferentes distancias mínimas entre radares.
-* Incorporar nuevas variables relacionadas con las condiciones de la vía.
-* Incorporar información meteorológica más detallada.
-* Utilizar medidas de exposición al tráfico.
+* Incorporar información de tráfico más detallada.
+* Realizar un análisis de sensibilidad de los pesos del índice de peligrosidad.
+* Estudiar diferentes radios de exclusión.
+* Incorporar condiciones meteorológicas y características de la vía.
+* Introducir medidas de exposición al tráfico.
 * Comparar el algoritmo greedy con otros métodos de optimización.
-* Incorporar métricas de centralidad de grafos.
-* Actualizar periódicamente el modelo con nuevos datos de accidentes.
+* Incorporar medidas de centralidad de grafos.
+* Actualizar el modelo con nuevos datos de accidentes.
 
 ---
 
 # 🤖 Uso de Inteligencia Artificial
 
-Durante el desarrollo del proyecto se utilizaron herramientas de Inteligencia Artificial como apoyo complementario para:
+Durante el desarrollo del proyecto se utilizaron herramientas de Inteligencia Artificial como apoyo complementario para tareas como:
 
 * Revisión y mejora de la redacción.
-* Configuración de documentos.
-* Generación y apoyo en determinadas partes del código.
+* Apoyo en determinadas partes del código.
 * Desarrollo de visualizaciones.
 * Exploración bibliográfica.
 * Revisión de consistencia del código.
@@ -391,16 +387,8 @@ Escuela de Ingenierías Industrial, Informática y Aeroespacial
 
 ---
 
-## 📄 Documentación
+## 📚 Documentación
 
-La documentación completa del proyecto, incluyendo la metodología, formulación del problema, algoritmos y resultados, se encuentra disponible en:
+Para consultar la metodología completa y el desarrollo del proyecto:
 
-👉 **[Memoria del proyecto](docs/project_report.pdf)**
-
----
-
-## ⚖️ Licencia y datos
-
-Este proyecto ha sido desarrollado con fines académicos.
-
-Los datos utilizados proceden de fuentes públicas. Antes de redistribuir los datasets originales, deben consultarse sus correspondientes condiciones de uso y licencia.
+👉 **[Memoria del proyecto](docs/memoria.pdf)**

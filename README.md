@@ -391,4 +391,4 @@ Escuela de Ingenierías Industrial, Informática y Aeroespacial
 
 Para consultar la metodología completa y el desarrollo del proyecto:
 
-👉 **[Memoria del proyecto](docs/memoria.pdf)**
+👉 **[📄 Consultar memoria completa](docs/grupo_D_Antón_Lara.pdf)**

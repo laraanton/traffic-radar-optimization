@@ -337,7 +337,7 @@ madrid-traffic-radar-optimization/
 
 La memoria contiene la explicación completa de la metodología, el procesamiento de los datos, el modelado de la red, el algoritmo de optimización y los resultados obtenidos.
 
-👉 **[📄 Consultar memoria completa](docs/memoria.pdf)**
+👉 **[📄 Consultar memoria completa](docs/grupo_D_Antón_Lara.pdf)**
 
 ---
 
@@ -353,20 +353,6 @@ Algunas posibles líneas de trabajo futuro son:
 * Comparar el algoritmo greedy con otros métodos de optimización.
 * Incorporar medidas de centralidad de grafos.
 * Actualizar el modelo con nuevos datos de accidentes.
-
----
-
-# 🤖 Uso de Inteligencia Artificial
-
-Durante el desarrollo del proyecto se utilizaron herramientas de Inteligencia Artificial como apoyo complementario para tareas como:
-
-* Revisión y mejora de la redacción.
-* Apoyo en determinadas partes del código.
-* Desarrollo de visualizaciones.
-* Exploración bibliográfica.
-* Revisión de consistencia del código.
-
-El código generado o asistido mediante estas herramientas fue posteriormente integrado y validado dentro del proyecto.
 
 ---
 

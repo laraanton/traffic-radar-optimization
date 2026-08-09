@@ -371,10 +371,3 @@ Escuela de Ingenierías Industrial, Informática y Aeroespacial
 **Asignatura:** Matemática Finita II
 **Curso académico:** 2025–2026
 
----
-
-## 📚 Documentación
-
-Para consultar la metodología completa y el desarrollo del proyecto:
-
-👉 **[📄 Consultar memoria completa](docs/grupo_D_Antón_Lara.pdf)**

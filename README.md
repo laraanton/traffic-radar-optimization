@@ -115,7 +115,7 @@ Los resultados se representan mediante **mapas interactivos desarrollados con Fo
 
 Permite explorar la distribución espacial de los puntos negros de Madrid y consultar información sobre su peligrosidad.
 
-👉 **[🗺️ Abrir mapa interactivo de puntos negros](maps/index.html)**
+👉 **[🗺️ Abrir mapa interactivo de puntos negros](maps/black_spots.html)**
 
 ---
 
@@ -203,11 +203,11 @@ madrid-traffic-radar-optimization/
 │   └── 03_optimizacion_radares.ipynb
 │
 ├── maps/
-│   └── index.html
+│   └── black_spots.html
 │
 ├── data/
 │   ├── README.md
-│   └── processed/
+│   └── puntos_negros_nodos.csv
 │
 └── docs/
     └── memoria.pdf

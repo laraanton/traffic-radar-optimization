@@ -214,6 +214,8 @@ madrid-traffic-radar-optimization/
 
 ---
 
+---
+
 # 📄 Memoria del proyecto
 
 La memoria contiene la explicación completa de la metodología, el procesamiento de los datos, el modelado de la red, el algoritmo de optimización y los resultados obtenidos.

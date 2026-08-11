@@ -71,56 +71,42 @@ Se incorporan además datos sobre:
 Las fuentes principales son el **Portal de Datos Abiertos del Ayuntamiento de Madrid**, OpenStreetMap y Geofabrik.
 
 ---
-
 # 🔬 Metodología
 
-## 1️⃣ Detección y clasificación de puntos negros
+El proyecto se divide en cuatro etapas principales:
 
-El análisis comienza con el procesamiento de los datos de accidentes de tráfico de Madrid. Tras la limpieza y eliminación de duplicados, los accidentes se agregan espacialmente mediante una **rejilla regular de aproximadamente 90 × 90 metros**. Esta discretización permite identificar zonas donde existe una concentración elevada de accidentes.
+### 1️⃣ Detección de puntos negros
 
-Se optó por este enfoque frente a métodos de clustering como DBSCAN debido al **efecto de chaining** observado en zonas con una elevada densidad de accidentes, donde diferentes agrupaciones podían terminar conectándose entre sí.
+Los accidentes se agrupan espacialmente mediante una **rejilla de 90 × 90 metros** para detectar zonas con alta concentración de accidentes.
 
-A partir de esta agregación espacial se identifican **7.763 puntos negros**, que posteriormente se clasifican en cuatro niveles de peligrosidad: **CRÍTICO, ALTO, MEDIO y BAJO**. La clasificación tiene en cuenta tanto el número de accidentes como su gravedad.
+Se identifican **7.763 puntos negros**, clasificados en cuatro niveles de peligrosidad: **CRÍTICO, ALTO, MEDIO y BAJO**. La clasificación considera tanto el número de accidentes como su gravedad.
 
-Para caracterizar cada punto negro se calcula además un **índice de peligrosidad** que combina diferentes variables relacionadas con los accidentes. El índice asigna un mayor peso a la frecuencia de accidentes y a su gravedad, incorporando también los accidentes relacionados con el consumo de alcohol.
+### 2️⃣ Integración con la red viaria
 
-## 2️⃣ Integración con la red viaria
+La red de carreteras de Madrid se modela como un **grafo mediante OSMnx y NetworkX**.
 
-Una vez identificadas las zonas de mayor peligrosidad, se incorpora la **red de carreteras de Madrid** para trasladar el análisis espacial de los accidentes al contexto de las vías donde estos se producen.
+Los puntos negros se asignan a los nodos de la red cuando se encuentran a menos de **50 metros**, incorporando así la información de peligrosidad a las vías.
 
-La red se representa mediante un grafo utilizando **OSMnx y NetworkX**, donde los nodos representan puntos de la red viaria y las aristas representan los diferentes tramos de carretera.
+### 3️⃣ Evaluación de ubicaciones
 
-Los puntos negros se relacionan espacialmente con los nodos de esta red. Cuando un nodo se encuentra a una distancia inferior a **50 metros** de un punto negro, se le asigna la información de peligrosidad correspondiente. En caso de existir varios puntos cercanos, se considera el de mayor peligrosidad.
+Se generan candidatos para nuevos radares y cada uno recibe una puntuación basada en:
 
-Este proceso permite pasar de un análisis basado únicamente en coordenadas geográficas a una representación de la peligrosidad directamente asociada a la **red viaria de Madrid**.
+- Peligrosidad.
+- Tipo de vía.
+- Velocidad.
+- Intensidad de tráfico.
+- Conectividad.
+- Categoría del nodo.
 
-## 3️⃣ Evaluación de candidatos para nuevos radares
+### 4️⃣ Optimización
 
-A partir de la red viaria enriquecida con la información de peligrosidad se identifican diferentes tramos como posibles ubicaciones para nuevos radares.
+Se aplica un **algoritmo greedy de cobertura máxima ponderada** para seleccionar las mejores ubicaciones.
 
-Cada candidato recibe una puntuación que combina diferentes características relevantes para la seguridad vial, entre ellas el **nivel de peligrosidad, el tipo de vía, la velocidad, la intensidad de tráfico, la conectividad de la red y la categoría del nodo**.
+En cada paso se elige el candidato con mayor puntuación, evitando ubicaciones demasiado próximas mediante un **radio de exclusión de 500 metros**.
 
-De esta forma, la selección no depende únicamente del número de accidentes de una zona, sino que considera conjuntamente diferentes factores relacionados con el riesgo y las características de la vía.
+El proceso continúa hasta obtener las **25 ubicaciones finales**.
 
-## 4️⃣ Optimización mediante algoritmo Greedy
-
-Finalmente, se aplica un **algoritmo greedy de cobertura máxima ponderada** para seleccionar las ubicaciones de los nuevos radares.
-
-En cada iteración se selecciona el candidato con mayor puntuación entre los disponibles. Una vez seleccionado, se aplica una restricción espacial para evitar que las nuevas ubicaciones queden excesivamente próximas entre sí o a los radares existentes.
-
-En el proyecto se utiliza un **radio de exclusión de 500 metros** y el proceso continúa hasta obtener las **25 ubicaciones finales**.
-
-El algoritmo greedy permite obtener una solución de forma eficiente para un problema de optimización espacial de gran tamaño. No obstante, al tratarse de un método heurístico, la solución obtenida no garantiza necesariamente el óptimo global.
-
-## 5️⃣ Visualización de los resultados
-
-Los resultados de las diferentes etapas se representan mediante **mapas interactivos desarrollados con Folium y Leaflet**. Estos permiten explorar la distribución de los puntos negros, consultar sus principales características y visualizar posteriormente las ubicaciones seleccionadas por el modelo de optimización.
-
-De esta manera, el proyecto combina el análisis cuantitativo de los accidentes con una representación espacial que facilita la interpretación de los resultados.
-
-```
-
----
+> **Objetivo:** maximizar la cobertura de las zonas de mayor riesgo evitando una concentración excesiva de radares.
 
 ## 1️⃣ Detección de puntos negros
 

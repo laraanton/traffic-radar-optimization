@@ -128,6 +128,7 @@ Permite visualizar la red viaria de Madrid y su relación con los puntos negros 
 Muestra las **25 ubicaciones seleccionadas** por el algoritmo de optimización.
 
 👉 [🗺️ Ver mapa de radares seleccionados](https://laraanton.github.io/traffic-radar-optimization/maps/radares_elegidos.html)
+
 ---
 
 # 📓 Notebooks

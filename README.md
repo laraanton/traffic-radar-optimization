@@ -109,13 +109,25 @@ El proceso continúa hasta seleccionar las **25 ubicaciones finales**.
 
 # 🗺️ Resultados interactivos
 
-Los resultados se representan mediante **mapas interactivos desarrollados con Folium y Leaflet**.
+El proyecto incluye tres mapas interactivos desarrollados con **Folium y Leaflet** para visualizar los principales resultados del análisis.
 
-### 🔴 Mapa de puntos negros
+### 🔴 Puntos negros
 
 Permite explorar la distribución espacial de los puntos negros de Madrid y consultar información sobre su peligrosidad.
 
-👉 **[🗺️ Abrir mapa interactivo de puntos negros](maps/black_spots.html)**
+👉 **[🗺️ Abrir mapa de puntos negros](maps/black_spots.html)**
+
+### 🛣️ Red viaria
+
+Permite visualizar la red viaria de Madrid y su relación con los puntos negros identificados.
+
+👉 **[🗺️ Abrir mapa de la red viaria](maps/red_viaria_madrileña.html)**
+
+### 📡 Radares seleccionados
+
+Muestra las **25 ubicaciones seleccionadas** por el algoritmo de optimización.
+
+👉 **[🗺️ Abrir mapa de radares seleccionados](maps/radares_elegidos.html)**
 
 ---
 
@@ -203,7 +215,9 @@ madrid-traffic-radar-optimization/
 │   └── 03_optimizacion_radares.ipynb
 │
 ├── maps/
-│   └── black_spots.html
+│   ├── black_spots.html
+│   ├── radares_elegidos.html
+│   └── red_viaria_madrileña.html
 │
 ├── data/
 │   ├── README.md

@@ -115,20 +115,19 @@ El proyecto incluye tres mapas interactivos desarrollados con **Folium y Leaflet
 
 Permite explorar la distribución espacial de los puntos negros de Madrid y consultar información sobre su peligrosidad.
 
-👉 **[🗺️ Abrir mapa de puntos negros](maps/black_spots.html)**
+👉 [🗺️ Ver mapa de puntos negros](https://laraanton.github.io/traffic-radar-optimization/maps/black_spots.html)
 
 ### 🛣️ Red viaria
 
 Permite visualizar la red viaria de Madrid y su relación con los puntos negros identificados.
 
-👉 **[🗺️ Abrir mapa de la red viaria](maps/red_viaria_madrileña.html)**
+👉 [🗺️ Ver mapa de la red viaria](https://laraanton.github.io/traffic-radar-optimization/maps/red_viaria_madrileña.html)
 
 ### 📡 Radares seleccionados
 
 Muestra las **25 ubicaciones seleccionadas** por el algoritmo de optimización.
 
-👉 **[🗺️ Abrir mapa de radares seleccionados](maps/radares_elegidos.html)**
-
+👉 [🗺️ Ver mapa de radares seleccionados](https://laraanton.github.io/traffic-radar-optimization/maps/radares_elegidos.html)
 ---
 
 # 📓 Notebooks

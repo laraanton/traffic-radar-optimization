@@ -255,20 +255,14 @@ Algunas posibles líneas de trabajo futuro son:
 
 # 👥 Autores
 
-**Lara Antón Güemes**
-
-**Hugo García Gutierrez**
-
-**Juan Manuel de Miguel**
-
-**Nuria García Arnaíz**
-
-**Daniela Pino Criado**
-
+**Lara Antón Güemes**<br>
+**Hugo García Gutierrez**<br>
+**Juan Manuel de Miguel**<br>
+**Nuria García Arnaíz**<br>
+**Daniela Pino Criado**<br>
 **Yonathan Bautista Pilar**
 
-
-**Universidad de León**
+**Universidad de León**<br>
 Escuela de Ingenierías Industrial, Informática y Aeroespacial
 
 **Asignatura:** Matemática Finita II

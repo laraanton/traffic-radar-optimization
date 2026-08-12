@@ -256,11 +256,17 @@ Algunas posibles líneas de trabajo futuro son:
 # 👥 Autores
 
 **Lara Antón Güemes**
+
 **Hugo García Gutierrez**
+
 **Juan Manuel de Miguel**
+
 **Nuria García Arnaíz**
+
 **Daniela Pino Criado**
+
 **Yonathan Bautista Pilar**
+
 
 **Universidad de León**
 Escuela de Ingenierías Industrial, Informática y Aeroespacial
